@@ -1,0 +1,13 @@
+package: github.com/josa42/go-terminal-markdown
+homepage: https://github.com/josa42/go-terminal-markdown
+license: MIT
+owners:
+- name: Josa Gesell
+  email: josa@gesell.me
+import:
+- package: github.com/fatih/color
+  version: ~1.5.0
+- package: github.com/josa42/go-terminal-image
+  version: ~0.1.0
+- package: github.com/josa42/go-terminal-hyperlink
+  version: ~0.1.0
