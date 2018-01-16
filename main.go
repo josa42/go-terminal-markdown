@@ -15,13 +15,15 @@ import (
 )
 
 var (
-	bold        = color.New(color.Bold).Add(color.FgHiWhite).SprintFunc()
-	undeline    = color.New(color.Underline).SprintFunc()
-	headlineExp = regexp.MustCompile(`(^|\n)(#{1,6})([^\n]+)`)
-	linksExp    = regexp.MustCompile(`\[([^\[]+)\]\(([^\)]+)\)`)
-	imgExp      = regexp.MustCompile(`!\[([^\[]*)\]\(([^\)]+)\)`)
-	boldExp     = regexp.MustCompile(`(\*\*|__)([^*]+)(\*\*|__)`)
-	tmpFiles    = []string{}
+	// MaxImageWidth :
+	MaxImageWidth = 500
+	bold          = color.New(color.Bold).Add(color.FgHiWhite).SprintFunc()
+	undeline      = color.New(color.Underline).SprintFunc()
+	headlineExp   = regexp.MustCompile(`(^|\n)(#{1,6})([^\n]+)`)
+	linksExp      = regexp.MustCompile(`\[([^\[]+)\]\(([^\)]+)\)`)
+	imgExp        = regexp.MustCompile(`!\[([^\[]*)\]\(([^\)]+)\)`)
+	boldExp       = regexp.MustCompile(`(\*\*|__)([^*]+)(\*\*|__)`)
+	tmpFiles      = []string{}
 )
 
 func parse(md string) string {
@@ -46,7 +48,7 @@ func parse(md string) string {
 		}
 
 		search := strings.TrimSpace(v[0])
-		replace := image.CreateWithSize(href, image.Size{MaxWidth: 200})
+		replace := image.CreateWithSize(href, image.Size{MaxWidth: MaxImageWidth})
 
 		md = strings.Replace(md, search, replace, -1)
 	}
