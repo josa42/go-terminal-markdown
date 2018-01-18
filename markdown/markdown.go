@@ -20,6 +20,8 @@ var (
 	bold          = color.New(color.Bold).Add(color.FgHiWhite).SprintFunc()
 	undeline      = color.New(color.Underline).SprintFunc()
 	headlineExp   = regexp.MustCompile(`(^|\n)(#{1,6})([^\n]+)`)
+	headlineH1Exp = regexp.MustCompile(`(?m)^(.+)\n=+$`)
+	headlineH2Exp = regexp.MustCompile(`(?m)^(.+)\n-+$`)
 	linksExp      = regexp.MustCompile(`\[([^\[]+)\]\(([^\)]+)\)`)
 	imgExp        = regexp.MustCompile(`!\[([^\[]*)\]\(([^\)]+)\)`)
 	boldExp       = regexp.MustCompile(`(\*\*|__)([^*]+)(\*\*|__)`)
@@ -34,6 +36,22 @@ func parse(md string) string {
 
 		search := strings.TrimSpace(v[0])
 		replace := formatHeadline(level, text)
+
+		md = strings.Replace(md, search, replace, -1)
+	}
+
+	for _, v := range headlineH1Exp.FindAllStringSubmatch(md, -1) {
+		text := strings.TrimSpace(v[1])
+		search := strings.TrimSpace(v[0])
+		replace := formatHeadline(1, text)
+
+		md = strings.Replace(md, search, replace, -1)
+	}
+
+	for _, v := range headlineH2Exp.FindAllStringSubmatch(md, -1) {
+		text := strings.TrimSpace(v[1])
+		search := strings.TrimSpace(v[0])
+		replace := formatHeadline(2, text)
 
 		md = strings.Replace(md, search, replace, -1)
 	}
