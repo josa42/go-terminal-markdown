@@ -27,6 +27,7 @@ var (
 	imgExp        = regexp.MustCompile(`!\[([^\[]*)\]\(([^\)]+)\)`)
 	boldExp       = regexp.MustCompile(`(\*\*|__)([^*]+)(\*\*|__)`)
 	blogquoteExp  = regexp.MustCompile(`\n\>(.*)?`)
+	lineExp       = regexp.MustCompile(`\n(-{5,})`)
 	tmpFiles      = []string{}
 )
 
@@ -98,6 +99,11 @@ func parse(md string) string {
 		replace := fmt.Sprintf(" %s%s", quote("|"), text)
 
 		md = strings.Replace(md, search, replace, 1)
+	}
+
+	for _, v := range lineExp.FindAllStringSubmatch(md, -1) {
+		search := strings.TrimSpace(v[0])
+		md = strings.Replace(md, search, quote(strings.Repeat("-", 80)), 1)
 	}
 
 	return strings.TrimSpace(md)
