@@ -20,7 +20,7 @@ var (
 	bold          = color.New(color.Bold).Add(color.FgHiWhite).SprintFunc()
 	undeline      = color.New(color.Underline).SprintFunc()
 	quote         = color.New(color.FgHiBlack).SprintFunc()
-	headlineExp   = regexp.MustCompile(`(^|\n)(#{1,6})([^\n]+)`)
+	headlineExp   = regexp.MustCompile(`(^|\n)(#{1,6})([^#][^\n]+)`)
 	headlineH1Exp = regexp.MustCompile(`(?m)^(.+)\n=+$`)
 	headlineH2Exp = regexp.MustCompile(`(?m)^(.+)\n-+$`)
 	linksExp      = regexp.MustCompile(`\[([^\[]+)\]\(([^\)]+)\)`)
@@ -59,7 +59,6 @@ func parse(md string) string {
 	}
 
 	for _, v := range imgExp.FindAllStringSubmatch(md, -1) {
-		// alttext := v[1]
 		href := strings.TrimSpace(v[2])
 
 		if strings.HasPrefix(href, "http") {
@@ -120,7 +119,7 @@ func formatHeadline(level int, text string) string {
 		text = bold(text)
 	}
 
-	return text
+	return fmt.Sprintf("\n%s %s\n", strings.Repeat("#", level), strings.TrimSpace(text))
 }
 
 func downloadFile(url string) string {
