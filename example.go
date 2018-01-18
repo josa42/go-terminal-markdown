@@ -54,8 +54,21 @@ function run() {
 ` + "```" + `
 
 
+<!--
+
+Comment here
+
+-->
+
 Some text with **bold** parts.
 Some text with __bold__ parts.
+
+<!--
+
+And here
+
+-->
+
 
 ####### Foobar3
 

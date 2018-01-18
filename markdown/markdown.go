@@ -32,6 +32,7 @@ var (
 	lineExp       = regexp.MustCompile(`\n(-{5,})`)
 	emptyLineExp  = regexp.MustCompile(`\n\n\n+`)
 	codeBlockExp  = regexp.MustCompile("```[a-z]*\\n([\\s\\S]*?)\\n```")
+	commentExp    = regexp.MustCompile(`<!--([\s\S]*?)-->`)
 	tmpFiles      = []string{}
 )
 
@@ -110,15 +111,9 @@ func parse(md string) string {
 		md = strings.Replace(md, search, gray(strings.Repeat("-", 80)), 1)
 	}
 
-	for _, v := range emptyLineExp.FindAllStringSubmatch(md, -1) {
-		md = strings.Replace(md, v[0], "\n\n", -1)
-	}
-
 	for _, v := range codeBlockExp.FindAllStringSubmatch(md, -1) {
 
 		code := strings.Split(v[1], "\n")
-
-		// prefix := strings.Repeat(" ", 4)
 
 		for idx, line := range code {
 			line = strings.Replace(line, "\t", "  ", -1)
@@ -135,6 +130,14 @@ func parse(md string) string {
 		emptyLine := strings.Repeat(" ", 5) + codeLine(strings.Repeat(" ", 75))
 
 		md = strings.Replace(md, v[0], emptyLine+"\n"+strings.Join(code, "\n")+"\n"+emptyLine, -1)
+	}
+
+	for _, v := range commentExp.FindAllStringSubmatch(md, -1) {
+		md = strings.Replace(md, v[0], "", -1)
+	}
+
+	for _, v := range emptyLineExp.FindAllStringSubmatch(md, -1) {
+		md = strings.Replace(md, v[0], "\n\n", -1)
 	}
 
 	return strings.TrimSpace(md)
