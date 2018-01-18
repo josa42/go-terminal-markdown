@@ -19,12 +19,14 @@ var (
 	MaxImageWidth = 500
 	bold          = color.New(color.Bold).Add(color.FgHiWhite).SprintFunc()
 	undeline      = color.New(color.Underline).SprintFunc()
+	quote         = color.New(color.FgHiBlack).SprintFunc()
 	headlineExp   = regexp.MustCompile(`(^|\n)(#{1,6})([^\n]+)`)
 	headlineH1Exp = regexp.MustCompile(`(?m)^(.+)\n=+$`)
 	headlineH2Exp = regexp.MustCompile(`(?m)^(.+)\n-+$`)
 	linksExp      = regexp.MustCompile(`\[([^\[]+)\]\(([^\)]+)\)`)
 	imgExp        = regexp.MustCompile(`!\[([^\[]*)\]\(([^\)]+)\)`)
 	boldExp       = regexp.MustCompile(`(\*\*|__)([^*]+)(\*\*|__)`)
+	blogquoteExp  = regexp.MustCompile(`\n\>(.*)?`)
 	tmpFiles      = []string{}
 )
 
@@ -88,6 +90,15 @@ func parse(md string) string {
 		replace := bold(text)
 
 		md = strings.Replace(md, search, replace, -1)
+	}
+
+	for _, v := range blogquoteExp.FindAllStringSubmatch(md, -1) {
+		text := v[1]
+
+		search := strings.TrimSpace(v[0])
+		replace := fmt.Sprintf(" %s%s", quote("|"), text)
+
+		md = strings.Replace(md, search, replace, 1)
 	}
 
 	return strings.TrimSpace(md)

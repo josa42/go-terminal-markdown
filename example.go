@@ -9,6 +9,9 @@ func main() {
 ##Foobar
 ## Foobar2
 
+> Blog quote
+> here
+
 Hallo Welt
 ==========
 
