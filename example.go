@@ -25,6 +25,30 @@ Foobar 2
 
 ` + "```" + `
 function run() {
+	console.log("Foo"); console.log("Foo"); console.log("Foo"); console.log("Foo"); console.log("Foo"); console.log("Foo"); console.log("Foo")
+}
+` + "```" + `
+
+` + "```" + `
+function run() {
+	console.log("Foo")
+}
+function run() {
+	console.log("Foo")
+}
+function run() {
+	console.log("Foo")
+}
+function run() {
+	console.log("Foo")
+}
+function run() {
+	console.log("Foo")
+}
+function run() {
+	console.log("Foo")
+}
+function run() {
 	console.log("Foo")
 }
 ` + "```" + `

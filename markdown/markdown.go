@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/fatih/color"
@@ -117,15 +118,21 @@ func parse(md string) string {
 
 		code := strings.Split(v[1], "\n")
 
+		// prefix := strings.Repeat(" ", 4)
+
 		for idx, line := range code {
 			line = strings.Replace(line, "\t", "  ", -1)
-			line = "  " + line + strings.Repeat(" ", 76-len(line))
+			if len(line) > 72 {
+				line = string([]rune(line)[0:72])
+			}
+			line = "  " + line + strings.Repeat(" ", (73)-len(line))
 			line = codeLine(line)
-			line = fmt.Sprintf("%d %s", idx+1, line)
-			code[idx] = line
+
+			no := strconv.Itoa(idx + 1)
+			code[idx] = fmt.Sprintf("%4s %s", no, line)
 		}
 
-		emptyLine := "  " + codeLine(strings.Repeat(" ", 78))
+		emptyLine := strings.Repeat(" ", 5) + codeLine(strings.Repeat(" ", 75))
 
 		md = strings.Replace(md, v[0], emptyLine+"\n"+strings.Join(code, "\n")+"\n"+emptyLine, -1)
 	}
