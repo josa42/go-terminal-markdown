@@ -23,6 +23,13 @@ Foobar 2
 
 
 
+` + "```" + `
+function run() {
+	console.log("Foo")
+}
+` + "```" + `
+
+
 Some text with **bold** parts.
 Some text with __bold__ parts.
 

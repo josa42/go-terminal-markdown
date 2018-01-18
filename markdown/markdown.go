@@ -20,6 +20,7 @@ var (
 	bold          = color.New(color.Bold).Add(color.FgHiWhite).SprintFunc()
 	undeline      = color.New(color.Underline).SprintFunc()
 	gray          = color.New(color.FgHiBlack).SprintFunc()
+	codeLine      = color.New(color.BgHiBlack).Add(color.FgHiWhite).SprintFunc()
 	headlineExp   = regexp.MustCompile(`(^|\n)(#{1,6})([^#][^\n]+)`)
 	headlineH1Exp = regexp.MustCompile(`(?m)^(.+)\n=+$`)
 	headlineH2Exp = regexp.MustCompile(`(?m)^(.+)\n-+$`)
@@ -29,6 +30,7 @@ var (
 	blockquoteExp = regexp.MustCompile(`\n\>(.*)?`)
 	lineExp       = regexp.MustCompile(`\n(-{5,})`)
 	emptyLineExp  = regexp.MustCompile(`\n\n\n+`)
+	codeBlockExp  = regexp.MustCompile("```[a-z]*\\n([\\s\\S]*?)\\n```")
 	tmpFiles      = []string{}
 )
 
@@ -109,6 +111,23 @@ func parse(md string) string {
 
 	for _, v := range emptyLineExp.FindAllStringSubmatch(md, -1) {
 		md = strings.Replace(md, v[0], "\n\n", -1)
+	}
+
+	for _, v := range codeBlockExp.FindAllStringSubmatch(md, -1) {
+
+		code := strings.Split(v[1], "\n")
+
+		for idx, line := range code {
+			line = strings.Replace(line, "\t", "  ", -1)
+			line = "  " + line + strings.Repeat(" ", 76-len(line))
+			line = codeLine(line)
+			line = fmt.Sprintf("%d %s", idx+1, line)
+			code[idx] = line
+		}
+
+		emptyLine := "  " + codeLine(strings.Repeat(" ", 78))
+
+		md = strings.Replace(md, v[0], emptyLine+"\n"+strings.Join(code, "\n")+"\n"+emptyLine, -1)
 	}
 
 	return strings.TrimSpace(md)
