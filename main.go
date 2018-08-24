@@ -31,7 +31,7 @@ var (
 	blockquoteExp = regexp.MustCompile(`\n\>(.*)?`)
 	lineExp       = regexp.MustCompile(`\n(-{5,})`)
 	emptyLineExp  = regexp.MustCompile(`\n\n\n+`)
-	codeBlockExp  = regexp.MustCompile("```[a-z]*\\n([\\s\\S]*?)\\n```")
+	codeBlockExp  = regexp.MustCompile("```[A-Za-z]*\\n([\\s\\S]*?)\\n```")
 	commentExp    = regexp.MustCompile(`<!--([\s\S]*?)-->`)
 	tmpFiles      = []string{}
 )
